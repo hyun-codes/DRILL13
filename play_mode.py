@@ -7,6 +7,9 @@ from boy import Boy
 from grass import Grass
 
 
+BALL_SIZES = {SDLK_0: None, SDLK_1: 21, SDLK_2: 41}
+
+
 def handle_events():
     global item_window_open
     event_list = get_events()
@@ -22,8 +25,10 @@ def handle_events():
             return
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
             item_window_open = not item_window_open
+        elif item_window_open and event.type == SDL_KEYDOWN and event.key in BALL_SIZES:
+            boy.ball_size = BALL_SIZES[event.key]
         else:
-            boy.handle_event(event)
+            boy.handle_event(event, fire_after_waking=item_window_open)
 
 
 

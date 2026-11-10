@@ -18,6 +18,7 @@ class Boy:
         self.dir = 0
         self.face_dir = 1
         self.pressed_keys = set()
+        self.ball_size = 21
 
         self.machine = Machine(
             model=self,
@@ -47,15 +48,17 @@ class Boy:
         self.frame = 0
 
     def fire_ball(self):
-        ball = Ball(self.x, self.y, self.face_dir * 10)
-        game_world.add_oject(ball)
+        if self.ball_size is not None:
+            ball = Ball(self.x, self.y, self.face_dir * 10, self.ball_size)
+            game_world.add_oject(ball)
 
-    def handle_event(self, event):
+    def handle_event(self, event, *, fire_after_waking=False):
         if (event.type == SDL_KEYDOWN and
                 event.key == SDLK_SPACE and
                 self.state == 'SLEEP'):
             self.wake_up()
-            return
+            if not fire_after_waking:
+                return
 
         if (event.type == SDL_KEYDOWN and
                 event.key == SDLK_SPACE and
