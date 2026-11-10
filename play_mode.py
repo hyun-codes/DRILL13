@@ -8,6 +8,7 @@ from grass import Grass
 
 
 def handle_events():
+    global item_window_open
     event_list = get_events()
     for event in event_list:
         if event.type == SDL_QUIT:
@@ -19,14 +20,18 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
             game_framework.push_mode(pause_mode)
             return
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
+            item_window_open = not item_window_open
         else:
             boy.handle_event(event)
 
 
 
 def init():
-    global boy
+    global boy, item_image, item_window_open
 
+    item_image = load_image('item_select.png')
+    item_window_open = False
 
     boy = Boy()
     game_world.add_oject(boy)
@@ -52,6 +57,8 @@ def update():
 def render():
     clear_canvas()
     game_world.render()
+    if item_window_open:
+        item_image.draw(get_canvas_width() // 2, get_canvas_height() // 2)
     update_canvas()
 
 def finish():
